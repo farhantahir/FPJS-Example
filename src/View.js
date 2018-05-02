@@ -3,7 +3,8 @@ import { h } from 'virtual-dom';
 import { 
 	showFormAction,
 	mealsInputAction,
-	caloriesInputAction
+	caloriesInputAction,
+	saveMealAction
 } from './Update';
 
 const { pre, div, h1, button, form, label, input } = hh(h);
@@ -25,7 +26,11 @@ function buttonSet(dispatch) {
 		button(
 			{
 				className: 'f3 pv2 ph3 bg-blue white bn mr2 dim',
-				type: 'Submit'
+				type: 'Submit',
+				onclick: e => {
+					e.preventDefault();					
+					dispatch(saveMealAction());
+				}
 			},
 			'Save'
 		),
@@ -72,7 +77,7 @@ function view(dispatch, model) {
 		[
 			h1({ className: 'tc f2, pv2, bb'}, 'Calories Counter'),
 			formView(dispatch, model),
-			pre(JSON.stringify(model))
+			pre(JSON.stringify(model, null, 4))
 		]
 	);
 }
