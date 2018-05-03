@@ -29,46 +29,58 @@ function cell(tag, className, value) {
   return tag({className}, value);
 }
 
-function mealRow(className, meal) {
+function mealRow(dispatch, className, meal) {
   return tr({ className }, [
     cell(td, 'pa2', meal.description),
     cell(td, 'pa2 tr', meal.calories),
+    cell(td, 'pa2 tc', ''),
   ]);
 }
 
-function mealsBody(className, meals) {
-  const rows = R.map(R.partial(mealRow, ['stripe-dark']), meals);
+function mealsBody(dispatch, className, meals) {
+  const rows = R.map(R.partial(mealRow, [dispatch, 'stripe-dark']), meals);
   return tbody({ className }, rows);
 }
 
 
-function mealsHeader(className, headings){   
+function mealsHeader(className = ''){   
   return thead({ className }, [
   	cell(th, 'pa2 tl b', 'Meal'),
-  	cell(th, 'pa2 tr b', 'Calories')
+  	cell(th, 'pa2 tr b', 'Calories'),
+  	cell(th, 'pa2 tr b', '')
  	]);  
 }
 
 
 function mealsFooter(className, meals){
-  const totalCalories  = R.reduce((sum, m) => sum + m.calories, 0, meals);
+  const totalCalories  = R.pipe(
+  	R.map(meal => meal.calories),
+  	R.sum
+	)(meals);
   const footerRow = tr({className: 'pa2'}, [
-    cell(td, 'pa2 b', 'Total'),
+    cell(td, 'pa2 tr', 'Total:'),
     cell(td, 'pa2 tr b', totalCalories),
   ]);
-  return tfoot({className}, [footerRow]);
+  return tfoot({ className }, [ footerRow ]);
 }
 
 
-function mealsTable(dispatch, className, model) {
+function mealsTable(dispatch, model) {
 	const { meals } = model;
 	
-	if (!meals.length) return "";
+	if (!meals.length) {
+		return div({ className : 'mv2 black-50 i mv3 tc' }, 'No meals to display...')
+	}
 
-  const header = mealsHeader('',['Meal', 'Calories']);
-  const body = mealsBody('', meals);
+  const header = mealsHeader();
+  const body = mealsBody(dispatch, '', meals);
   const footer = mealsFooter('bt b', meals);
-  return table({className}, [header,body, footer]);
+  return table(
+	  { 
+	  	className : 'mw6 center w-100 collapse mv3' 
+	  }, 
+	  [ header, body, footer ]
+  );
 }
 
 
@@ -143,7 +155,7 @@ function view(dispatch, model) {
 		[
 			h1({ className: 'tc f2, pv2, bb'}, 'Calories Counter'),
 			formView(dispatch, model),
-			mealsTable(dispatch, 'mw6 center w-100 collapse mv3', model)
+			mealsTable(dispatch, model)
 		]
 	);
 }
