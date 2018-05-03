@@ -4,11 +4,21 @@ const ACTION_TYPES = {
 	SHOW_FORM: "SHOW_FORM",
 	MEAL_INPUT: "MEAL_INPUT",
 	CALORIES_INPUT: "CALORIES_INPUT",
-	SAVE_MEAL: "SAVE_MEAL"
+	SAVE_MEAL: "SAVE_MEAL",
+	DELETE_MEAL: "DELETE_MEAL"
 };
 
 
 export const saveMealAction = () => ({ type: ACTION_TYPES.SAVE_MEAL });
+
+export function deleteMealAction(id) {
+	return {
+		type: ACTION_TYPES.DELETE_MEAL,
+		data: {
+			id
+		}
+	};
+}
 
 export function showFormAction(showForm) {
 	return {
@@ -57,6 +67,14 @@ function update(action, model) {
 
 		case ACTION_TYPES.SAVE_MEAL: 
 			return add(action, model);
+
+		case ACTION_TYPES.DELETE_MEAL: 
+			const { data: { id } } = action;
+			const meals = R.filter(
+				meal => meal.id !== id,
+				model.meals
+			);
+			return { ...model, meals };
 
 		default:
 			return model;	

@@ -5,7 +5,8 @@ import {
 	showFormAction,
 	mealsInputAction,
 	caloriesInputAction,
-	saveMealAction
+	saveMealAction,
+	deleteMealAction
 } from './Update';
 
 const { pre, 
@@ -21,7 +22,8 @@ const { pre,
 				tbody, 
 				thead,
 				tfoot, 
-				table 
+				table,
+				i 
 			} = hh(h);
 
 
@@ -33,7 +35,12 @@ function mealRow(dispatch, className, meal) {
   return tr({ className }, [
     cell(td, 'pa2', meal.description),
     cell(td, 'pa2 tr', meal.calories),
-    cell(td, 'pa2 tc', ''),
+    cell(td, 'pa2 tc', [
+    	i({ 
+    		className: 'pa1 fa fa-trash-o pointer',
+    		onclick: () => dispatch(deleteMealAction(meal.id))
+    	})
+  	]),
   ]);
 }
 
