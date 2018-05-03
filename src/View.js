@@ -6,7 +6,8 @@ import {
 	mealsInputAction,
 	caloriesInputAction,
 	saveMealAction,
-	deleteMealAction
+	deleteMealAction,
+	editMealAction
 } from './Update';
 
 const { pre, 
@@ -39,6 +40,10 @@ function mealRow(dispatch, className, meal) {
     	i({ 
     		className: 'pa1 fa fa-trash-o pointer',
     		onclick: () => dispatch(deleteMealAction(meal.id))
+    	}),
+    	i({
+    		className: 'pa1 fa fa-pencil-square-o pointer',
+    		onclick: () => dispatch(editMealAction(meal.id))
     	})
   	]),
   ]);
