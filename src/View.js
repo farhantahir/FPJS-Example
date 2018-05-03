@@ -1,3 +1,4 @@
+import * as R from 'ramda';
 import hh from 'hyperscript-helpers';
 import { h } from 'virtual-dom';
 import { 
@@ -7,7 +8,72 @@ import {
 	saveMealAction
 } from './Update';
 
-const { pre, div, h1, button, form, label, input } = hh(h);
+const { pre, 
+				div, 
+				h1, 
+				button, 
+				form, 
+				label, 
+				input,
+				td, 
+				th, 
+				tr, 
+				tbody, 
+				thead,
+				tfoot, 
+				table 
+			} = hh(h);
+
+
+function cell(tag, className, value) { 
+  return tag({className}, value);
+}
+
+function mealRow(className, meal) {
+  return tr({ className }, [
+    cell(td, 'pa2', meal.description),
+    cell(td, 'pa2 tr', meal.calories),
+  ]);
+}
+
+function mealsBody(className, meals) {
+  const rows = R.map(R.partial(mealRow, ['stripe-dark']), meals);
+  return tbody({ className }, rows);
+}
+
+
+function mealsHeader(className, headings){   
+  return thead({ className }, [
+  	cell(th, 'pa2 tl b', 'Meal'),
+  	cell(th, 'pa2 tr b', 'Calories')
+ 	]);  
+}
+
+
+function mealsFooter(className, meals){
+  const totalCalories  = R.reduce((sum, m) => sum + m.calories, 0, meals);
+  const footerRow = tr({className: 'pa2'}, [
+    cell(td, 'pa2 b', 'Total'),
+    cell(td, 'pa2 tr b', totalCalories),
+  ]);
+  return tfoot({className}, [footerRow]);
+}
+
+
+function mealsTable(dispatch, className, model) {
+	const { meals } = model;
+	
+	if (!meals.length) return "";
+
+  const header = mealsHeader('',['Meal', 'Calories']);
+  const body = mealsBody('', meals);
+  const footer = mealsFooter('bt b', meals);
+  return table({className}, [header,body, footer]);
+}
+
+
+
+
 
 function fieldSet(labelText, inputValue, oninput) {
 	return div([
@@ -77,7 +143,7 @@ function view(dispatch, model) {
 		[
 			h1({ className: 'tc f2, pv2, bb'}, 'Calories Counter'),
 			formView(dispatch, model),
-			pre(JSON.stringify(model, null, 4))
+			mealsTable(dispatch, 'mw6 center w-100 collapse mv3', model)
 		]
 	);
 }
