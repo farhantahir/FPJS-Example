@@ -1,11 +1,11 @@
 {
-  "name": "caloriecounter",
+  "name": "fpjs-example",
   "version": "1.0.0",
-  "description": "Calorie Counter App",
+  "description": "A Calorie Counter app developed using concepts of functional programming",
   "scripts": {
     "start": "webpack-dev-server --open"
   },
-  "author": "James Moore",
+  "author": "Farhan Tahir",
   "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.26.0",
