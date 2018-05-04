@@ -8,7 +8,7 @@ import {
 	saveMealAction,
 	deleteMealAction,
 	editMealAction
-} from './Update';
+} from './Actions.js';
 
 const { pre, 
 				div, 
@@ -94,9 +94,6 @@ function mealsTable(dispatch, model) {
 	  [ header, body, footer ]
   );
 }
-
-
-
 
 
 function fieldSet(labelText, inputValue, oninput) {
