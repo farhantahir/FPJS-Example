@@ -3,7 +3,7 @@
 An example app (Calories Counter) built using the concepts of functional programming in JavaScript.
 
 ### Installing and Running
-Install dependancies using
+Install dependencies using
 
 ```
 npm install
